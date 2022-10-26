@@ -34,13 +34,6 @@ export default {
 			currencies: null,
 		}
 	},
-	computed: {
-		currenciesArray() {
-			if (!this.currencies) return;
-
-			return Object.entries(this.currencies);
-		},
-	},
 	async mounted() {
 		this.loading = true;
 

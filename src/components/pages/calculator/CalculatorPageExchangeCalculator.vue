@@ -80,14 +80,8 @@ export default {
 	},
 	methods: {
 		convertCurrency() {
-			this.checkCorrectnessCurrencies();
 			this.currenciesCharToUpperCase();
 
-			const exchangeRate = +(this.currencies[this.firstCurrency]?.Value / this.currencies[this.secondCurrency]?.Value).toFixed(2);
-
-			this.totalPrice = this.quantity * exchangeRate;
-		},
-		checkCorrectnessCurrencies() {
 			if (
 				!this.currencies[this.firstCurrency] 
 				|| !this.currencies[this.secondCurrency]
@@ -98,6 +92,10 @@ export default {
 			}
 
 			this.exchangeError = false;
+
+			const exchangeRate = +(this.currencies[this.firstCurrency]?.Value / this.currencies[this.secondCurrency]?.Value).toFixed(2);
+
+			this.totalPrice = this.quantity * exchangeRate;
 		},
 		currenciesCharToUpperCase() {
 			this.firstCurrency = this.firstCurrency.toUpperCase();
