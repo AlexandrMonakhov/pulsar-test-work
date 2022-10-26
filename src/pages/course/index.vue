@@ -44,7 +44,9 @@ export default {
 	async mounted() {
 		this.loading = true;
 
-		this.currencies = await axios.get('https://www.cbr-xml-daily.ru/daily_json.js').then(response => response.data.Valute);
+		this.currencies = await axios
+			.get('https://www.cbr-xml-daily.ru/daily_json.js')
+			.then(response => response.data.Valute);
 
 		this.loading = false;
 	},

@@ -6,9 +6,12 @@
 			</label>
 
 			<input 
-				class="pl-[20px] pt-[20px] pr-[20px] pb-[18px] lg:pb-[21px] border border-solid border-[#DFDFDF] rounded-[5px] placeholder-[#A0A3BD]" 
+				class="pl-[20px] pt-[20px] pr-[20px] pb-[18px] lg:pb-[21px] border border-solid border-[#DFDFDF] rounded-[5px] placeholder-[#A0A3BD]"
+				:class="errorClassName" 
 				type="text" 
-				placeholder="Введите название или код" 
+				placeholder="Введите название или код"
+				v-model="firstCurrency"
+				@input="convertCurrency"
 			/>
 		</div>
 
@@ -18,9 +21,12 @@
 			</label>
 
 			<input 
-				class="pl-[20px] pt-[20px] pr-[20px] pb-[18px] lg:pb-[21px] border border-solid border-[#DFDFDF] rounded-[5px] placeholder-[#A0A3BD]" 
+				class="pl-[20px] pt-[20px] pr-[20px] pb-[18px] lg:pb-[21px] border border-solid border-[#DFDFDF] rounded-[5px] placeholder-[#A0A3BD]"
+				:class="errorClassName" 
 				type="text" 
-				placeholder="Введите название или код" 
+				placeholder="Введите название или код"
+				v-model="secondCurrency"
+				@input="convertCurrency"
 			/>
 		</div>
 
@@ -32,7 +38,9 @@
 			<input 
 				class="pl-[20px] pt-[18px] pr-[20px] pb-[19px] lg:pt-[20.32px] lg:pb-[20.61px] border border-solid border-[#DFDFDF] rounded-[5px] placeholder-[#A0A3BD]" 
 				type="number" 
-				placeholder="Введите число" 
+				placeholder="Введите число"
+				v-model="quantity"
+				@input="convertCurrency"
 			/>
 		</div>
 
@@ -46,9 +54,54 @@
 export default {
 	name: 'CalculatorPageExchangeCalculator',
 	props: {
-		totalPrice: {
-			type: Number,
-			default: 0,
+		currencies: {
+			type: Object,
+			default: null,
+		},
+	},
+	data() {
+		return {
+			firstCurrency: 'AUD',
+			secondCurrency: 'AZN',
+			quantity: 10,
+			totalPrice: 0,
+			exchangeError: false,
+		}
+	},
+	computed: {
+		errorClassName() {
+			return this.exchangeError 
+				? 'border-[#E02025]' 
+				: '';
+		},
+	},
+	mounted() {
+		this.convertCurrency();
+	},
+	methods: {
+		convertCurrency() {
+			this.checkCorrectnessCurrencies();
+			this.currenciesCharToUpperCase();
+
+			const exchangeRate = +(this.currencies[this.firstCurrency]?.Value / this.currencies[this.secondCurrency]?.Value).toFixed(2);
+
+			this.totalPrice = this.quantity * exchangeRate;
+		},
+		checkCorrectnessCurrencies() {
+			if (
+				!this.currencies[this.firstCurrency] 
+				|| !this.currencies[this.secondCurrency]
+			) {
+				this.exchangeError = true;
+
+				return;
+			}
+
+			this.exchangeError = false;
+		},
+		currenciesCharToUpperCase() {
+			this.firstCurrency = this.firstCurrency.toUpperCase();
+			this.secondCurrency = this.secondCurrency.toUpperCase();
 		},
 	},
 }
